@@ -1,4 +1,17 @@
-import type { MetaFunction } from '@remix-run/cloudflare';
+import { type MetaFunction, type LoaderFunctionArgs, json } from '@remix-run/cloudflare';
+import { useLoaderData } from '@remix-run/react';
+import { fetchPortraitImageSource } from '~/utils/r2controll';
+
+type FigureResponse = {
+  id: number;
+  lastName: string | null;
+  firstName: string;
+  courtesyName: string | null;
+  lastNameKana: string | null;
+  firstNameKana: string;
+  courtesyNameKana: string | null;
+  portrait: string | null;
+};
 
 export const meta: MetaFunction = () => {
   return [
@@ -10,26 +23,38 @@ export const meta: MetaFunction = () => {
   ];
 };
 
+export const loader = async ({ context }: LoaderFunctionArgs) => {
+  const { API_URL, BUCKET } = context.cloudflare.env;
+
+  const response = await fetch(`${API_URL}/api/figures`);
+  const data = (await response.json()) as { figures: FigureResponse[] };
+
+  const figures = data.figures.map(async (figure) => {
+    const { portrait, ...remain } = figure;
+
+    return {
+      ...remain,
+      portrait: {
+        filename: portrait,
+        imageSrc: await fetchPortraitImageSource(BUCKET, portrait),
+      },
+    };
+  });
+
+  return json(await Promise.all(figures));
+};
+
 export default function Index() {
+  const figures = useLoaderData<typeof loader>();
+
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', lineHeight: '1.8' }}>
-      <h1>Welcome to Remix (with Vite and Cloudflare)</h1>
-      <ul>
-        <li>
-          <a
-            target="_blank"
-            href="https://developers.cloudflare.com/pages/framework-guides/deploy-a-remix-site/"
-            rel="noreferrer"
-          >
-            Cloudflare Pages Docs - Remix guide
-          </a>
-        </li>
-        <li>
-          <a target="_blank" href="https://remix.run/docs" rel="noreferrer">
-            Remix Docs
-          </a>
-        </li>
-      </ul>
+      <h1>作成中</h1>
+      {figures.map((figure) => (
+        <div key={figure.id}>
+          <img src={figure.portrait.imageSrc ?? ''} />
+        </div>
+      ))}
     </div>
   );
 }
