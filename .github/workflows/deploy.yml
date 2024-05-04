@@ -8,10 +8,14 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
     timeout-minutes: 60
     name: Deploy
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Create Toml File
         run: |
@@ -23,7 +27,7 @@ jobs:
           binding = "BUCKET"
           bucket_name = "${{ secrets.R2_BUCKET_NAME }}"
           [vars]
-          API_URL = "{{ secrets.API_URL }}"
+          API_URL = "${{ secrets.API_URL }}"
           EOF
 
       - name: Deploy
