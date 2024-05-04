@@ -27,7 +27,7 @@ jobs:
           EOF
 
       - name: Deploy
-        uses: cloudflare/pages-action@1
+        uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CF_TOKEN }}
           accountId: ${{ secrets.CF_ACCOUNT_ID }}
