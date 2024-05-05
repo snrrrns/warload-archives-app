@@ -20,9 +20,20 @@ module.exports = {
     es6: true,
   },
   ignorePatterns: ['!**/.server', '!**/.client'],
+  rules: {
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+        destructuredArrayIgnorePattern: '^_',
+      },
+    ],
+  },
 
   // Base config
-  extends: ['eslint:recommended'],
+  extends: ['eslint:recommended', 'prettier'],
 
   overrides: [
     // React

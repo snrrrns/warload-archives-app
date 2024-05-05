@@ -7,3 +7,5 @@ node_modules
 .wrangler
 wrangler.toml
 .dev.vars
+
+package-lock.json

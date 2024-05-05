@@ -52,7 +52,7 @@ export default function Index() {
       <h1>作成中</h1>
       {figures.map((figure) => (
         <div key={figure.id}>
-          <img src={figure.portrait.imageSrc ?? ''} />
+          <img src={figure.portrait.imageSrc ?? ''} alt={figure.portrait.filename ?? ''} />
         </div>
       ))}
     </div>
