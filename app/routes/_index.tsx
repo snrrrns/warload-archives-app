@@ -63,7 +63,7 @@ export default function Index() {
               className="bg-white rounded-lg shadow-md cursor-pointer relative group"
             >
               {figure.portrait.imageSrc ? (
-                <div className="h-44 overflow-hidden">
+                <div className="h-72 sm:h-60 overflow-hidden">
                   <img
                     src={figure.portrait.imageSrc}
                     alt={figure.portrait.filename ?? ''}
@@ -71,7 +71,7 @@ export default function Index() {
                   />
                 </div>
               ) : (
-                <div className="h-44 bg-[url('/app/images/placeholder.png')] bg-cover bg-center" />
+                <div className="h-72 sm:h-60 bg-[url('/app/images/placeholder.png')] bg-cover bg-center" />
               )}
               <div className="p-4">
                 <h2 className="text-l">{displayName(figure)}</h2>
